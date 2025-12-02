@@ -191,6 +191,10 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
+        /* NEW PREMIUM BACKGROUND */
+        .bg-silver-premium {
+            background: linear-gradient(to bottom, #F3F4F6, #E5E7EB); /* Subtle silver gradient */
+        }
         
         /* ANIMATIONS */
         .reveal { opacity: 0; transition: all 1s cubic-bezier(0.22, 1, 0.36, 1); will-change: opacity, transform; }
@@ -200,11 +204,25 @@
         .reveal-right { transform: translateX(40px); }
         .reveal-zoom { transform: scale(0.9); }
         .reveal-flip { transform: perspective(1000px) rotateX(20deg) translateY(30px); }
+
+        /* NEW GACOR PREMIUM POP ANIMATION */
+        @keyframes premiumPop {
+            0% { opacity: 0; transform: translateY(40px) scale(0.8) rotateX(10deg); }
+            60% { opacity: 1; transform: translateY(-10px) scale(1.02) rotateX(0deg); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .reveal-premium-pop {
+            opacity: 0;
+            will-change: opacity, transform;
+        }
+        .reveal-premium-pop.active {
+             animation: premiumPop 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
         
-        .delay-100 { transition-delay: 100ms; }
-        .delay-200 { transition-delay: 200ms; }
-        .delay-300 { transition-delay: 300ms; }
-        .delay-400 { transition-delay: 400ms; }
+        .delay-100 { transition-delay: 100ms; animation-delay: 100ms; }
+        .delay-200 { transition-delay: 200ms; animation-delay: 200ms; }
+        .delay-300 { transition-delay: 300ms; animation-delay: 300ms; }
+        .delay-400 { transition-delay: 400ms; animation-delay: 400ms; }
 
         /* PATTERNS */
         .bg-premium-dots { background-image: radial-gradient(#CBD5E1 1.5px, transparent 1.5px); background-size: 24px 24px; }
@@ -544,14 +562,14 @@
                 }, { threshold: 0.15, rootMargin: "0px 0px -50px 0px" });
 
                 setTimeout(() => {
-                    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+                    document.querySelectorAll('.reveal, .reveal-premium-pop').forEach(el => observer.observe(el));
                 }, 100);
                 app.observer = observer;
             },
 
             refreshAnimations: () => {
                 if(app.observer) {
-                    document.querySelectorAll('.reveal:not(.active)').forEach(el => app.observer.observe(el));
+                    document.querySelectorAll('.reveal:not(.active), .reveal-premium-pop:not(.active)').forEach(el => app.observer.observe(el));
                 }
             },
 
@@ -946,7 +964,7 @@
                         </div>
                     </section>
 
-                    <section class="bg-premium-dots py-14 bg-gray-50 flex flex-col justify-center">
+                    <section class="bg-premium-dots py-14 bg-silver-premium flex flex-col justify-center">
                          <div class="max-w-7xl mx-auto px-4 w-full">
                             <div class="flex justify-between items-end mb-8 reveal reveal-up">
                                 <div><h2 class="font-serif text-2xl font-bold text-onyx-900">Jenis Perak</h2></div>
@@ -1074,7 +1092,7 @@
                              </div>
                         </div>
                     </div>
-                    <section class="py-8 md:py-12 bg-gray-50 min-h-screen">
+                    <section class="py-8 md:py-12 bg-silver-premium min-h-screen">
                         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                             <!-- SKELETON LOADER INJECTED HERE INITIALLY -->
                             <div id="productGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-8 mb-12">
@@ -1114,7 +1132,7 @@
                  if(types.length === 0) types.push('Klasik', 'Dirham', 'Bullion'); 
                  return types.map((t, i) => {
                      let dName = t === 'Dirham' || t === '1 Dirham Coin' ? 'Dirham Coin' : t;
-                     return `<div onclick="app.filterByCategory('${t}'); app.navigate('products')" class="group cursor-pointer premium-card rounded-2xl p-5 reveal reveal-up delay-${(i+1)*100} h-full flex flex-col">
+                     return `<div onclick="app.filterByCategory('${t}'); app.navigate('products')" class="group cursor-pointer premium-card rounded-2xl p-5 reveal-premium-pop delay-${(i+1)*100} h-full flex flex-col">
                         <div class="flex justify-between items-start mb-4 relative z-10">
                             <div class="p-2 bg-white border border-gray-100 rounded-xl text-gray-400 group-hover:bg-onyx-900 group-hover:text-white transition-colors shadow-sm"><i data-lucide="${app.getIconForType(t)}" class="w-5 h-5"></i></div>
                             <i data-lucide="arrow-up-right" class="w-4 h-4 text-gray-300 group-hover:text-onyx-900 transition"></i>
@@ -1182,7 +1200,7 @@
                                 </div>`;
                             }
                             
-                            return `<div onclick="app.openModal(${state.products.indexOf(p)})" class="bg-white rounded-xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col group cursor-pointer hover:-translate-y-1 reveal reveal-up delay-${(index%4)*100}">
+                            return `<div onclick="app.openModal(${state.products.indexOf(p)})" class="bg-white rounded-xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col group cursor-pointer hover:-translate-y-1 reveal-premium-pop delay-${(index%4)*100}">
                                 <div class="relative pt-[100%] bg-gray-100 overflow-hidden">${fallback}<span class="absolute top-2 left-2 px-1.5 py-0.5 text-[8px] font-bold rounded ${badge} z-10">${p.status||'PRE-ORDER'}</span></div>
                                 <div class="p-3 flex-1 flex flex-col">
                                     <div class="mb-2"><span class="text-[8px] text-gray-400 font-bold tracking-wider">${p.kemurnian}</span><h3 class="font-bold text-onyx-900 text-sm leading-snug mt-0.5 font-serif line-clamp-2">${p.jenis}</h3><p class="text-xs text-gray-500 mt-0.5">${p.gramasi} Gram</p></div>
