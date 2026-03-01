@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://bilhuri.github.io/perakin/sitemap.xml
